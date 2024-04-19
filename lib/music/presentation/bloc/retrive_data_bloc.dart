@@ -29,7 +29,7 @@ class RetriveDataBloc extends Bloc<RetriveDataEvent, RetriveDataState> {
     });
     on<PlayMusic>((event, emit) async {
       await _audioPlayer.setAudioSource(
-        initialPosition: Duration.zero,
+        initialPosition: event.duration,
         AudioSource.uri(
           Uri.parse(
             event.uri,

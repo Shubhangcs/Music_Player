@@ -50,13 +50,10 @@ class _AlbumPageState extends State<AlbumPage> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      context.read<RetriveDataBloc>().add(
-                        PlayMusic(uri: state.data[index].uri!),
-                      );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const MusicPlayPage(),
+                          builder: (context) =>  MusicPlayPage(songs: state.data,index: index,),
                         ),
                       );
                     },

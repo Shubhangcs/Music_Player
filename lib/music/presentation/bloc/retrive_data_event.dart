@@ -6,7 +6,8 @@ final class RetriveData extends RetriveDataEvent {}
 
 final class PlayMusic extends RetriveDataEvent {
   final String uri;
-  PlayMusic({required this.uri});
+  final Duration duration;
+  PlayMusic({required this.uri , required this.duration});
 }
 
 final class PauseMusic extends RetriveDataEvent {}

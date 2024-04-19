@@ -4,9 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music/music/presentation/bloc/retrive_data_bloc.dart';
 import 'package:music/music/presentation/widgets/neo_button.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class MusicPlayPage extends StatefulWidget {
-  const MusicPlayPage({super.key});
+  final List<SongModel> songs;
+  final int index;
+  const MusicPlayPage({super.key, required this.songs, required this.index});
 
   @override
   State<MusicPlayPage> createState() => _MusicPlayPageState();
@@ -15,6 +18,18 @@ class MusicPlayPage extends StatefulWidget {
 class _MusicPlayPageState extends State<MusicPlayPage> {
   Duration _changeDuration = const Duration();
   Duration _endPosition = const Duration();
+  int ins = 0;
+  @override
+  void initState() {
+    context.read<RetriveDataBloc>().add(
+          PlayMusic(
+            uri: widget.songs[widget.index].uri!,
+            duration: _changeDuration,
+          ),
+        );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +39,9 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
       ),
@@ -117,7 +134,14 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                         context.read<RetriveDataBloc>().add(
                               PauseMusic(),
                             );
-                      } else {}
+                      } else {
+                        context.read<RetriveDataBloc>().add(
+                              PlayMusic(
+                                uri: widget.songs[widget.index].uri!,
+                                duration: _changeDuration,
+                              ),
+                            );
+                      }
                     },
                     child: NeoButton(
                       width: 140,
@@ -134,6 +158,24 @@ class _MusicPlayPageState extends State<MusicPlayPage> {
                   ),
                   Expanded(
                     child: GestureDetector(
+                      onTap: () {
+                        ins = widget.index + 1;
+                        if (widget.songs[ins].uri != null) {
+                          context.read<RetriveDataBloc>().add(
+                                PlayMusic(
+                                  uri: widget.songs[ins].uri!,
+                                  duration: _changeDuration,
+                                ),
+                              );
+                        } else {
+                          context.read<RetriveDataBloc>().add(
+                                PlayMusic(
+                                  uri: widget.songs[widget.index-widget.index].uri!,
+                                  duration: _changeDuration,
+                                ),
+                              );
+                        }
+                      },
                       child: const NeoButton(
                         height: 60,
                         child: Icon(
